@@ -1,5 +1,11 @@
-import os
+'''
+    pip freeze > requirements.txt
+    pyi-makespec --onefile Main.py
+    pyinstaller Main.spec
+'''
 
+import os
+import sys
 import PySimpleGUI as sg
 import MetaInfoAV
 import MetaInfoImage
@@ -24,7 +30,8 @@ def main_wind():
               [sg.Button("Выбрать файл", key='-load-'), sg.Input(key='-Input-', size=(45, 1), justification='left'),
                sg.Button("Очистить вывод", key='-clear-')],
               [sg.Output(size=(88, 20), key='-out-')]]
-    window = sg.Window('Метаинформация', layout)
+    window = sg.Window('Метаинформация', layout, finalize=True)
+
     while True:
         event, values = window.read()
         if event == 'Проверить' and values['-Input-'] != '':
@@ -53,5 +60,13 @@ def main_wind():
     window.close()
 
 
+def resource_path(relative):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative)
+    return os.path.join(relative)
+
+
 if __name__ == '__main__':
+    ico = resource_path(os.path.join('data', 'new_ico.ico'))
+    sg.set_global_icon(ico)
     main_wind()
